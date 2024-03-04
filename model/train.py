@@ -7,9 +7,9 @@ import pytorch_lightning as pl
 from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 
-from .model import NeuralSupersamplingModel
-from .data import trainloader, valloader
-from .perceptual_loss import PerceptualLoss
+from model import NeuralSupersamplingModel
+from data import trainloader, valloader
+from perceptual_loss import PerceptualLoss
 from config import (
     learning_rate,
     history_length,

@@ -16,7 +16,7 @@ perceptual_loss_weight = 0.1
 num_workers = os.cpu_count() // 2
 weight_decay = 1e-5
 fps = 30
-data_root = "/content/renderings"
+data_root = "datasets/QRISP"
 tensorboard_root = os.environ["TENSORBOARD_PATH"]
 color_file_extension = "png"
 depth_file_extension = "exr"
@@ -27,11 +27,10 @@ source_resolution = (480, 270)
 target_resolution = (1920, 1080)
 train_random_crop_size = (64, 64)
 train_scenes = [
-    "agent327",
-    "coffeerun",
-    "caminandesllamigos",
+    "CBApocalypse",
+    "FloodedGrounds"
 ]
 test_scenes = [
-    "dweebs",
+    "FloodedGroundsBridges",
 ]
 blender_executable = os.environ["BLENDER_PATH"]

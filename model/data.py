@@ -55,7 +55,7 @@ class NeuralSupersamplingDataset(Dataset):
         self.device = device
         self.random_crop_size = random_crop_size
 
-        self.source_files_depth =  sorted(glob.glob(os.path.join(source_root_depth, f"{superscene}*_{rendering_engine}_{source_resolution[0]}_{source_resolution[1]}_*.{depth_file_extension}")))
+        self.source_files_depth = sorted(glob.glob(os.path.join(source_root_depth, f"{superscene}*_{rendering_engine}_{source_resolution[0]}_{source_resolution[1]}_*.{depth_file_extension}")))
         self.source_files_motion = sorted(glob.glob(os.path.join(source_root_motion, f"{superscene}*_{rendering_engine}_{source_resolution[0]}_{source_resolution[1]}_*.{motion_file_extension}")))
         assert all([os.path.basename(a) == os.path.basename(b) for a, b in zip(self.source_files_depth, self.source_files_motion)])
         
@@ -123,7 +123,7 @@ trainset = torch.utils.data.ConcatDataset([
         os.path.join(data_root, "motion"),
         os.path.join(data_root, "color"),
         scene,
-        "cycles",
+        "unity",
         random_crop_size=train_random_crop_size,
     )
     for scene in train_scenes
@@ -139,7 +139,7 @@ testset = torch.utils.data.ConcatDataset([
         os.path.join(data_root, "motion"),
         os.path.join(data_root, "color"),
         scene,
-        "cycles",
+        "unity",
     )
     for scene in test_scenes
 ])

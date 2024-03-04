@@ -1,0 +1,8 @@
+opencv-python
+tqdm
+numpy
+OpenEXR
+Imath
+kornia
+pytorch-lightning==1.9.5
+av
