@@ -6,7 +6,6 @@ import imageio
 # os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
 os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
 import cv2
-os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
 
 
 # Input parameters
@@ -29,11 +28,11 @@ motion_folder = "MotionVectorsMipBiasMinus2"
 
 
 # Output parameters
-dataset_output_root = r"D:\repos\MultiframeSR\neural-supersampling\datasets\QRISP"
+dataset_output_root = r"QRISP"
 
 depth_out_ext = "exr"
 
-gt_out_folder = "enhanced"
+gt_out_folder = "color"
 color_out_folder = "color"
 depth_out_folder = "depth"
 motion_out_folder = "motion"
@@ -42,56 +41,65 @@ rendering_engine = "unity"
 
 
 if __name__ == "__main__":
-    # scenes = os.listdir(dataset_path)
-    # #sequences = []
-    # for scene in scenes:
-    #     print(scene)
-    #     gt_sequences_path = os.path.join(dataset_path, scene, f"{gt_res_h}p", gt_folder)
-    #     color_sequences_path = os.path.join(dataset_path, scene, f"{input_res_h}p", color_folder)
-    #     depth_sequences_path = os.path.join(dataset_path, scene, f"{input_res_h}p", depth_folder)
-    #     motion_sequences_path = os.path.join(dataset_path, scene, f"{input_res_h}p", motion_folder)
-    #     gt_sequences = os.listdir(gt_sequences_path)
-    #     color_sequences = os.listdir(color_sequences_path)
-    #     depth_sequences = os.listdir(depth_sequences_path)
-    #     motion_sequences = os.listdir(motion_sequences_path)
-    #
-    #     assert len(color_sequences) == len(depth_sequences) \
-    #            and len(color_sequences) == len(motion_sequences) \
-    #            and len(color_sequences) == len(gt_sequences)
-    #     for sequence in color_sequences:
-    #         #sequences.append(sequence)
-    #         print(sequence)
-    #         curr_gt_sequence_path = os.path.join(gt_sequences_path, sequence)
-    #         curr_color_sequence_path = os.path.join(color_sequences_path, sequence)
-    #         curr_depth_sequence_path = os.path.join(depth_sequences_path, sequence)
-    #         curr_motion_sequence_path = os.path.join(motion_sequences_path, sequence)
-    #
-    #         assert len(os.listdir(curr_color_sequence_path)) == len(os.listdir(curr_depth_sequence_path)) \
-    #                and len(os.listdir(curr_color_sequence_path)) == len(os.listdir(curr_motion_sequence_path)) \
-    #                and len(os.listdir(curr_color_sequence_path)) == len(os.listdir(curr_gt_sequence_path))
-    #         for filename in os.listdir(curr_color_sequence_path):
-    #             frame_idx, _ext = os.path.splitext(filename)
-    #             curr_gt = os.path.join(curr_gt_sequence_path, f"{frame_idx}.{gt_ext}")
-    #             curr_color = os.path.join(curr_color_sequence_path, f"{frame_idx}.{color_ext}")
-    #             curr_depth = os.path.join(curr_depth_sequence_path, f"{frame_idx}.{depth_ext}")
-    #             curr_motion = os.path.join(curr_motion_sequence_path, f"{frame_idx}.{motion_ext}")
-    #
-    #             shutil.copy(curr_gt,
-    #                         os.path.join(dataset_output_root,
-    #                                      gt_out_folder,
-    #                                      f"{scene}{sequence}_{rendering_engine}_{gt_res_w}_{gt_res_h}_{frame_idx}.{gt_ext}"))
-    #             shutil.copy(curr_color,
-    #                         os.path.join(dataset_output_root,
-    #                                      color_out_folder,
-    #                                      f"{scene}{sequence}_{rendering_engine}_{input_res_w}_{input_res_h}_{frame_idx}.{color_ext}"))
-    #             shutil.copy(curr_depth,
-    #                         os.path.join(dataset_output_root,
-    #                                      depth_out_folder,
-    #                                      f"{scene}{sequence}_{rendering_engine}_{input_res_w}_{input_res_h}_{frame_idx}.{depth_ext}"))
-    #             shutil.copy(curr_motion,
-    #                         os.path.join(dataset_output_root,
-    #                                      motion_out_folder,
-    #                                      f"{scene}{sequence}_{rendering_engine}_{input_res_w}_{input_res_h}_{frame_idx}.{motion_ext}"))
+    # Copy files with folders structure witch required for training NSRR
+    scenes = os.listdir(dataset_path)
+    #sequences = []
+    for scene in scenes:
+        print(scene)
+        gt_sequences_path = os.path.join(dataset_path, scene, f"{gt_res_h}p", gt_folder)
+        color_sequences_path = os.path.join(dataset_path, scene, f"{input_res_h}p", color_folder)
+        depth_sequences_path = os.path.join(dataset_path, scene, f"{input_res_h}p", depth_folder)
+        motion_sequences_path = os.path.join(dataset_path, scene, f"{input_res_h}p", motion_folder)
+        gt_sequences = os.listdir(gt_sequences_path)
+        color_sequences = os.listdir(color_sequences_path)
+        depth_sequences = os.listdir(depth_sequences_path)
+        motion_sequences = os.listdir(motion_sequences_path)
+
+        assert len(color_sequences) == len(depth_sequences) \
+               and len(color_sequences) == len(motion_sequences) \
+               and len(color_sequences) == len(gt_sequences)
+        for sequence in color_sequences:
+            #sequences.append(sequence)
+            print(sequence)
+            curr_gt_sequence_path = os.path.join(gt_sequences_path, sequence)
+            curr_color_sequence_path = os.path.join(color_sequences_path, sequence)
+            curr_depth_sequence_path = os.path.join(depth_sequences_path, sequence)
+            curr_motion_sequence_path = os.path.join(motion_sequences_path, sequence)
+
+            assert len(os.listdir(curr_color_sequence_path)) == len(os.listdir(curr_depth_sequence_path)) \
+                   and len(os.listdir(curr_color_sequence_path)) == len(os.listdir(curr_motion_sequence_path)) \
+                   and len(os.listdir(curr_color_sequence_path)) == len(os.listdir(curr_gt_sequence_path))
+            for filename in os.listdir(curr_color_sequence_path):
+                frame_idx, _ext = os.path.splitext(filename)
+                curr_gt = os.path.join(curr_gt_sequence_path, f"{frame_idx}.{gt_ext}")
+                curr_color = os.path.join(curr_color_sequence_path, f"{frame_idx}.{color_ext}")
+                curr_depth = os.path.join(curr_depth_sequence_path, f"{frame_idx}.{depth_ext}")
+                curr_motion = os.path.join(curr_motion_sequence_path, f"{frame_idx}.{motion_ext}")
+
+                # Make dirs for outputs
+                os.makedirs(dataset_output_root, exist_ok=True)
+                os.makedirs(os.path.join(dataset_output_root, gt_out_folder), exist_ok=True)
+                os.makedirs(os.path.join(dataset_output_root, color_out_folder), exist_ok=True)
+                os.makedirs(os.path.join(dataset_output_root, depth_out_folder), exist_ok=True)
+                os.makedirs(os.path.join(dataset_output_root, motion_out_folder), exist_ok=True)
+
+                # Copy files
+                shutil.copy(curr_gt,
+                            os.path.join(dataset_output_root,
+                                         gt_out_folder,
+                                         f"{scene}{sequence}_{rendering_engine}_{gt_res_w}_{gt_res_h}_{frame_idx}.{gt_ext}"))
+                shutil.copy(curr_color,
+                            os.path.join(dataset_output_root,
+                                         color_out_folder,
+                                         f"{scene}{sequence}_{rendering_engine}_{input_res_w}_{input_res_h}_{frame_idx}.{color_ext}"))
+                shutil.copy(curr_depth,
+                            os.path.join(dataset_output_root,
+                                         depth_out_folder,
+                                         f"{scene}{sequence}_{rendering_engine}_{input_res_w}_{input_res_h}_{frame_idx}.{depth_ext}"))
+                shutil.copy(curr_motion,
+                            os.path.join(dataset_output_root,
+                                         motion_out_folder,
+                                         f"{scene}{sequence}_{rendering_engine}_{input_res_w}_{input_res_h}_{frame_idx}.{motion_ext}"))
 
 
     # Decode depth from QRISP encoded value:
