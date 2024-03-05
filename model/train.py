@@ -89,7 +89,8 @@ def main(args):
     checkpoint_callback = ModelCheckpoint(dirpath=args.checkpoint_dir, every_n_epochs=1)
     trainer = pl.Trainer.from_argparse_args(
         args,
-        accelerator="auto",
+        accelerator="gpu",
+        devices=[0],
         max_epochs=n_epochs,
         logger=logger,
         precision=16 if enable_amp else 32,

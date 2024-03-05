@@ -4,5 +4,5 @@ numpy
 OpenEXR
 Imath
 kornia
-pytorch-lightning==1.9.5
+pytorch-lightning==1.5.9
 av
